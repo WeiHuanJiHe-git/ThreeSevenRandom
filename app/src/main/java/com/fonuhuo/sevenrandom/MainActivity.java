@@ -43,7 +43,7 @@ public final class MainActivity extends Activity {
         numberParams.setMargins(0, dp(10), 0, dp(34));
         root.addView(numbers, numberParams);
 
-        TextView quotientLabel = label("超过 7：÷7 的商", 15, Typeface.NORMAL);
+        TextView quotientLabel = label("超过 6：÷6 的商", 15, Typeface.NORMAL);
         root.addView(quotientLabel);
         LinearLayout quotients = valueRow(quotientViews, 31, Typeface.NORMAL);
         LinearLayout.LayoutParams quotientParams = new LinearLayout.LayoutParams(
@@ -52,7 +52,7 @@ public final class MainActivity extends Activity {
         quotientParams.setMargins(0, dp(8), 0, dp(30));
         root.addView(quotients, quotientParams);
 
-        TextView remainderLabel = label("余数", 15, Typeface.NORMAL);
+        TextView remainderLabel = label("余数（0 记 6）", 15, Typeface.NORMAL);
         root.addView(remainderLabel);
         LinearLayout remainders = valueRow(remainderViews, 35, Typeface.BOLD);
         LinearLayout.LayoutParams remainderParams = new LinearLayout.LayoutParams(

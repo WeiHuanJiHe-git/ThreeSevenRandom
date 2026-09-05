@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
         android:allowBackup="false"
-        android:label="三数七余"
+        android:label="三数六余"
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"

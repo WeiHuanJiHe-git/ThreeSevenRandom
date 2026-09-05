@@ -4,12 +4,13 @@ import java.security.SecureRandom;
 import java.util.Random;
 
 /**
- * Generates three unbiased random integers and applies the "greater than 7" rule.
+ * Generates three unbiased random integers and maps values through a six-position cycle.
  * Default production randomness uses Android/Java's cryptographically strong SecureRandom.
  */
 public final class RandomEngine {
     public static final int MIN_VALUE = 1;
     public static final int MAX_VALUE = 999;
+    public static final int CYCLE_SIZE = 6;
 
     private final Random random;
 
@@ -33,10 +34,12 @@ public final class RandomEngine {
     }
 
     public static Analysis analyze(int value) {
-        if (value <= 7) {
+        if (value <= CYCLE_SIZE) {
             return Analysis.notDivided();
         }
-        return Analysis.divided(value / 7, value % 7);
+        int mathematicalRemainder = value % CYCLE_SIZE;
+        int cycleRemainder = mathematicalRemainder == 0 ? CYCLE_SIZE : mathematicalRemainder;
+        return Analysis.divided(value / CYCLE_SIZE, cycleRemainder);
     }
 
     public static final class Analysis {

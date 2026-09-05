@@ -4,45 +4,45 @@ import java.util.Random;
 
 public final class RandomEngineTest {
     public static void main(String[] args) {
-        testTenProducesOneAndThree();
-        testEightProducesOneAndOne();
-        testFourteenProducesTwoAndZero();
-        testSevenDoesNotProduceDerivedValues();
+        testTenProducesOneAndFour();
+        testSevenProducesOneAndOne();
+        testTwelveMapsZeroRemainderToSix();
+        testSixDoesNotProduceDerivedValues();
         testThreeDoesNotProduceDerivedValues();
         testConfiguredRangeIsOneToNineHundredNinetyNine();
         testGeneratedValuesStayWithinConfiguredRange();
         System.out.println("RandomEngineTest: ALL TESTS PASSED");
     }
 
-    private static void testTenProducesOneAndThree() {
+    private static void testTenProducesOneAndFour() {
         RandomEngine.Analysis result = RandomEngine.analyze(10);
         require(result.hasDivision(), "10 should be divided");
-        require(result.getQuotient() == 1, "10/7 quotient should be 1");
-        require(result.getRemainder() == 3, "10%7 remainder should be 3");
+        require(result.getQuotient() == 1, "10/6 quotient should be 1");
+        require(result.getRemainder() == 4, "10 should map to cycle remainder 4");
     }
 
-    private static void testEightProducesOneAndOne() {
-        RandomEngine.Analysis result = RandomEngine.analyze(8);
-        require(result.hasDivision(), "8 should be divided");
-        require(result.getQuotient() == 1, "8/7 quotient should be 1");
-        require(result.getRemainder() == 1, "8%7 remainder should be 1");
-    }
-
-    private static void testFourteenProducesTwoAndZero() {
-        RandomEngine.Analysis result = RandomEngine.analyze(14);
-        require(result.hasDivision(), "14 should be divided");
-        require(result.getQuotient() == 2, "14/7 quotient should be 2");
-        require(result.getRemainder() == 0, "14%7 remainder should be 0");
-    }
-
-    private static void testSevenDoesNotProduceDerivedValues() {
+    private static void testSevenProducesOneAndOne() {
         RandomEngine.Analysis result = RandomEngine.analyze(7);
-        require(!result.hasDivision(), "7 is not greater than 7");
+        require(result.hasDivision(), "7 is greater than 6");
+        require(result.getQuotient() == 1, "7/6 quotient should be 1");
+        require(result.getRemainder() == 1, "7 should map to cycle remainder 1");
+    }
+
+    private static void testTwelveMapsZeroRemainderToSix() {
+        RandomEngine.Analysis result = RandomEngine.analyze(12);
+        require(result.hasDivision(), "12 should be divided");
+        require(result.getQuotient() == 2, "12/6 quotient should be 2");
+        require(result.getRemainder() == 6, "a zero mathematical remainder must map to 6");
+    }
+
+    private static void testSixDoesNotProduceDerivedValues() {
+        RandomEngine.Analysis result = RandomEngine.analyze(6);
+        require(!result.hasDivision(), "6 is not greater than 6");
     }
 
     private static void testThreeDoesNotProduceDerivedValues() {
         RandomEngine.Analysis result = RandomEngine.analyze(3);
-        require(!result.hasDivision(), "3 is not greater than 7");
+        require(!result.hasDivision(), "3 is not greater than 6");
     }
 
     private static void testConfiguredRangeIsOneToNineHundredNinetyNine() {
