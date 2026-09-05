@@ -1,49 +1,27 @@
-# 三数六余（Android）
+# ThreeSevenRandom / 三数六宫
 
-一个极简、无网络权限、无第三方运行时依赖的原生 Android 小工具。
+一个极简、离线的 Android 随机起宫工具。
 
 ## 当前规则
 
-- 启动即随机生成 3 个整数。
-- 点击屏幕任意位置重新随机。
-- 默认范围：1–999（包含 1 和 999，均匀取值）。
-- 数字 `<= 6`：商、余数显示 `-`；顶部原数本身就是 1–6 的循环序号。
-- 数字 `> 6`：商为整数除法 `n / 6`。
-- 底部显示六宫循环余数：普通余数为 `n % 6`，如果数学余数是 `0`，显示为 `6`。
-- 示例：`10  3  8` → 商 `1  -  1` → 余数 `4  -  2`。
-- `12` → 商 `2`，余数显示 `6`（而不是 `0`）。
+- App 打开后，3 个数字会持续快速滚动；滚动只用于视觉预览。
+- 单击屏幕时立即停止，并在触摸发生的那一刻重新生成最终 3 个 `1..999` 随机整数。
+- 默认随机源为 Java/Android `SecureRandom`；触摸时的纳秒时间、事件时间和触摸坐标只作为附加熵混入，不替代 `SecureRandom`。
+- 停止后再次单击会重新开始滚动，再单击再次定数。
+- 六宫顺序：`大安 → 留连 → 速喜 → 赤口 → 小吉 → 空亡 → 大安 ...`
+- 第一数从大安起数，大安算 1。
+- 第二数从第一数落宫继续起数，当前宫算 1。
+- 第三数从第二数落宫继续起数，当前宫算 1。
+- 界面突出三次落宫与最终落宫，不显示商、余数。
 
-## 随机性
+例如最终定数为 `10, 3, 8`：
 
-生产代码使用 `java.security.SecureRandom`，由 Android/系统安全随机源播种。它不是可以证明的“物理真随机”，但不是时间戳伪随机，也不是 `Math.random()`，属于密码学安全随机数生成方式。
+`赤口 → 空亡 → 大安`，最终为 `大安`。
 
-## 修改随机范围
+## 关于随机性
 
-编辑：
+这里使用的是密码学安全伪随机（CSPRNG），不是可证明的物理真随机。滚动动画本身不会增加随机质量；最终结果在停止触摸瞬间重新调用 `SecureRandom` 生成，触摸信息只作为额外熵补充。
 
-`app/src/main/java/com/fonuhuo/sevenrandom/RandomEngine.java`
+## GitHub Actions
 
-只改：
-
-```java
-public static final int MIN_VALUE = 1;
-public static final int MAX_VALUE = 999;
-```
-
-## 构建
-
-### GitHub Actions（推荐）
-
-仓库已经包含 `.github/workflows/build-apk.yml`。推送到 `main` 后会自动：
-
-1. 使用 JDK 17；
-2. 安装 Android API 35 / Build Tools 35.0.0；
-3. 使用 Gradle 8.10.2；
-4. 先运行纯 Java 规则测试；
-5. 构建已签名的 Debug APK；
-6. 上传名为 `ThreeSevenRandom-apk` 的构建产物。
-
-在 GitHub 仓库打开 **Actions → Build Android APK → 最新一次运行 → Artifacts** 即可下载。
-
-也可以直接用 Android Studio 打开项目根目录后 Build APK。
-项目故意不使用 Compose、AndroidX、网络库、数据库或图片资源，以减少启动开销和 APK 体积。
+推送到 `main` 后，`.github/workflows/build-apk.yml` 会自动运行纯 Java 规则测试、构建 Debug APK，并上传为 `ThreeSevenRandom-apk` Artifact。
